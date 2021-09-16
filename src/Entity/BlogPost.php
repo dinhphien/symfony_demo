@@ -2,12 +2,15 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\BlogPostRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping\ManyToOne;
 
 /**
  * @ORM\Entity(repositoryClass=BlogPostRepository::class)
  */
+#[ApiResource()]
 class BlogPost
 {
     /**
@@ -33,14 +36,15 @@ class BlogPost
     private $content;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $author;
-
-    /**
      * * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $slug;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="posts")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $author;
 
     public function getId(): ?int
     {
@@ -83,18 +87,6 @@ class BlogPost
         return $this;
     }
 
-    public function getAuthor(): ?string
-    {
-        return $this->author;
-    }
-
-    public function setAuthor(string $author): self
-    {
-        $this->author = $author;
-
-        return $this;
-    }
-
     /**
      * Get the value of slug
      */ 
@@ -111,6 +103,27 @@ class BlogPost
     public function setSlug($slug)
     {
         $this->slug = $slug;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of author
+     * @return User
+     */ 
+    public function getAuthor(): User
+    {
+        return $this->author;
+    }
+
+    /**
+     * Set the value of author
+     * @param User $author
+     * @return  self
+     */ 
+    public function setAuthor(User $author): self
+    {
+        $this->author = $author;
 
         return $this;
     }
