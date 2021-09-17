@@ -6,22 +6,31 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\CommentRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\ManyToOne;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=CommentRepository::class)
  */
-#[ApiResource()]
+#[ApiResource(
+    itemOperations: ['GET'],
+    collectionOperations: ['GET'],
+    normalizationContext: [
+        'groups' => ['read']
+    ]
+)]
 class Comment
 {
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups("read")
      */
     private $id;
 
     /**
      * @ORM\Column(type="text")
+     * @Groups("read")
      */
     private $content;
 

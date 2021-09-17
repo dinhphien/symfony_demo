@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping\ManyToOne;
 /**
  * @ORM\Entity(repositoryClass=BlogPostRepository::class)
  */
-#[ApiResource()]
+#[ApiResource(itemOperations:['GET'], collectionOperations:['GET'])]
 class BlogPost
 {
     /**
