@@ -19,11 +19,24 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @UniqueEntity("email")
  */
 #[ApiResource(
-    itemOperations: ['GET'],
-    collectionOperations: ['POST'],
-    normalizationContext:[
-        'groups' => ['read', 'write']
-    ]
+    itemOperations: [
+        'GET' => [
+            'normalization_context' => ['groups' => ['get']],
+            'security' => "object === user"
+        ],
+        'PUT' => [
+            'denormalization_context' => ['groups' => ['put']],
+            'security' => "object === user",
+            'normalization_context' => ['groups' => ['get']],
+        ]
+    ],
+    collectionOperations: [
+        'POST' => [
+            'denormalization_context' => ['groups' => ['post']],
+            'normalization_context' => ['groups' => ['get']],
+        ]
+    ],
+
 )]
 class User implements UserInterface
 {
@@ -31,12 +44,13 @@ class User implements UserInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+     * @Groups({"get"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"read", "write"})
+     * @Groups({"get", "post", "get-comment-with-author", "get-blog-post-with-author"})
      * @Assert\NotBlank()
      * @Assert\Length(min=6,max=255)
      */
@@ -44,6 +58,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Groups({"post", "put"})
      * @Assert\NotBlank()
      * @Assert\Regex(
      *  pattern="/(?=.*[A-Z]).(?=.*[a-z])(?=.*[0-9]).{7}/",
@@ -54,7 +69,7 @@ class User implements UserInterface
     private $password;
 
     /**
-     * 
+     * @Groups({"post", "put"})
      * @Assert\NotBlank()
      * @Assert\Expression(
      *  "this.getPassword() === this.getRetypedPassword()",
@@ -65,21 +80,21 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="boolean")
-     * @Groups({"read", "write"})
+     * @Groups({"get", "post", "put"})
      * @Assert\NotBlank()
      */
     private $active;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"read", "write"})
+     * @Groups({"get", "post", "put"})
      * @Assert\NotBlank()
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups("read", "write")
+     * @Groups({"get", "post", "put", "get-comment-with-author", "get-blog-post-with-author"})
      * @Assert\NotBlank()
      * @Assert\Email()
      */
