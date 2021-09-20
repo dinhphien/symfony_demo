@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\BlogPost;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -12,9 +13,17 @@ use Symfony\Component\Serializer\Serializer;
 #[Route('/blog')]
 class BlogController extends AbstractController
 {
+    /**@var LoggerInterface */
+    private $logger;
+    public function __construct(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+    }
+
     #[Route('/', name:'blog_list', methods:['GET'])]
     public function list(): Response
     {
+        $this->logger->debug("Fetching all blogs!");
         $repository = $this->getDoctrine()->getRepository(BlogPost::class);
         $items = $repository->findAll();
         return $this->json([
