@@ -13,6 +13,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ORM\Entity(repositoryClass=CommentRepository::class)
  */
 #[ApiResource(
+    attributes:[
+        'order' => ['published' => 'DESC']
+    ],
     itemOperations: [
         'GET' => [
             'normalization_context' => ['groups' => ['get']]

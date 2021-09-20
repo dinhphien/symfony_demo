@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\BlogPostRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -12,6 +13,11 @@ use Doctrine\ORM\Mapping\ManyToOne;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Core\Annotation\ApiSubresource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\RangeFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
 
 /**
  * @ORM\Entity(repositoryClass=BlogPostRepository::class)
@@ -26,12 +32,23 @@ use ApiPlatform\Core\Annotation\ApiSubresource;
         ]
     ],
     collectionOperations: [
-        'GET',
+        'GET' => [
+            'normalization_context' => ['groups' => ['get-blog-post-with-author']]
+        ],
         'POST' => [
             'denormalization_context' => ['groups' => ['post']]
         ]
     ]
 )]
+#[ApiFilter(SearchFilter::class, properties: ['id' => 'exact', 'title' => 'partial', 'content' => 'partial', 'author.name' => 'partial'])]
+#[ApiFilter(DateFilter::class, properties: ['published'])]
+#[ApiFilter(RangeFilter::class, properties: ['id'])]
+#[ApiFilter(OrderFilter::class, properties: ['id', 'published', 'title'])]
+#[ApiFilter(PropertyFilter::class, arguments: [
+    'parameterName' => 'properties',
+    'overrideDefaultProperties' => 'false',
+    'whitelist' => ['id', 'author', 'slug', 'title', 'content']
+])]
 class BlogPost implements AuthoredEntityInterface, PublishedDateTimeInterface
 {
     /**
