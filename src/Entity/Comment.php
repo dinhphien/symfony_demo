@@ -14,7 +14,9 @@ use Symfony\Component\Serializer\Annotation\Groups;
  */
 #[ApiResource(
     attributes:[
-        'order' => ['published' => 'DESC']
+        'order' => ['published' => 'DESC'],
+        'pagination_enabled' => false,
+        'pagination_client_enabled' => true
     ],
     itemOperations: [
         'GET' => [
