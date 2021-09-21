@@ -29,19 +29,16 @@ class AuthoredEntitySubscriberTest extends TestCase
         );
     }
 
-    public function testSetAuthorCall()
+    /** 
+     * @dataProvider providerSetAuthorCall
+     * 
+     */
+    public function testSetAuthorCall(string $className, string $method, bool $shoulCallSetAuthor)
     {
 
-        $entityMock = $this->getEntityMock(BlogPost::class, true);
+        $entityMock = $this->getEntityMock($className, $shoulCallSetAuthor);
         $tokenStorageMock = $this->getTokenStorageMock();
-        $eventMock = $this->getEventMock(Request::METHOD_POST, $entityMock);
-        (new AuthoredEntitySubscriber($tokenStorageMock))->getAuthenticatedUser(
-            $eventMock
-        );
-
-        $tokenStorageMock = $this->getTokenStorageMock();
-        $entityMock = $this->getEntityMock(BlogPost::class, false);
-        $eventMock = $this->getEventMock(Request::METHOD_GET, $entityMock);
+        $eventMock = $this->getEventMock($method, $entityMock);
         (new AuthoredEntitySubscriber($tokenStorageMock))->getAuthenticatedUser(
             $eventMock
         );
@@ -89,5 +86,13 @@ class AuthoredEntitySubscriberTest extends TestCase
             ->method('setAuthor');
 
         return $entityMock;
+    }
+
+    public function providerSetAuthorCall()
+    {
+        return [
+            [BlogPost::class, 'POST', true],
+            [BlogPost::class, 'GET', false]
+        ];
     }
 }
