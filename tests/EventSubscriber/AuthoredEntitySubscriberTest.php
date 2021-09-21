@@ -5,6 +5,7 @@ namespace App\Tests\EventSubscriber;
 use ApiPlatform\Core\EventListener\EventPriorities;
 use App\Entity\AuthoredEntityInterface;
 use App\Entity\BlogPost;
+use App\Entity\Comment;
 use App\Entity\User;
 use App\EventSubscriber\AuthoredEntitySubscriber;
 use DG\BypassFinals;
@@ -44,17 +45,17 @@ class AuthoredEntitySubscriberTest extends TestCase
         );
     }
 
-    private function getTokenStorageMock(): MockObject
+    private function getTokenStorageMock(bool $hasToken = true): MockObject
     {
         $tokenMock = $this->createMock(TokenInterface::class);
-        $tokenMock->expects($this->once())
+        $tokenMock->expects($hasToken ? $this->once() : $this->never())
             ->method('getUser')
             ->willReturn(new User());
 
         $tokenStorageMock = $this->createMock(TokenStorageInterface::class);
         $tokenStorageMock->expects($this->once())
             ->method('getToken')
-            ->willReturn($tokenMock);
+            ->willReturn($hasToken ? $tokenMock : null);
         return $tokenStorageMock;
     }
 
@@ -88,11 +89,22 @@ class AuthoredEntitySubscriberTest extends TestCase
         return $entityMock;
     }
 
-    public function providerSetAuthorCall()
+    public function providerSetAuthorCall(): array
     {
         return [
             [BlogPost::class, 'POST', true],
-            [BlogPost::class, 'GET', false]
+            [BlogPost::class, 'GET', false],
+            [Comment::class, 'POST', true]
         ];
+    }
+
+
+    public function testNoTokenPresent()
+    {
+        $tokenStorageMock = $this->getTokenStorageMock(false);
+        $eventMock = $this->getEventMock(Request::METHOD_POST, new BlogPost());
+        (new AuthoredEntitySubscriber($tokenStorageMock))->getAuthenticatedUser(
+            $eventMock
+        );
     }
 }
