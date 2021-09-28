@@ -6,7 +6,8 @@ RUN apt-get update && apt-get install -y \
     curl \
     zip \
     unzip \
-    vim
+    vim \
+    libonig-dev
 
 RUN docker-php-ext-install \
     pdo \
