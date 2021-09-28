@@ -18,26 +18,6 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  * @UniqueEntity("username")
  * @UniqueEntity("email")
  */
-#[ApiResource(
-    itemOperations: [
-        'GET' => [
-            'normalization_context' => ['groups' => ['get']],
-            'security' => "object === user"
-        ],
-        'PUT' => [
-            'denormalization_context' => ['groups' => ['put']],
-            'security' => "object === user",
-            'normalization_context' => ['groups' => ['get']],
-        ]
-    ],
-    collectionOperations: [
-        'POST' => [
-            'denormalization_context' => ['groups' => ['post']],
-            'normalization_context' => ['groups' => ['get']],
-        ]
-    ],
-
-)]
 class User implements UserInterface
 {
     /**
@@ -159,7 +139,7 @@ class User implements UserInterface
 
     /**
      * Get the value of name
-     */ 
+     */
     public function getName()
     {
         return $this->name;
@@ -169,7 +149,7 @@ class User implements UserInterface
      * Set the value of name
      *
      * @return  self
-     */ 
+     */
     public function setName($name)
     {
         $this->name = $name;
@@ -179,7 +159,7 @@ class User implements UserInterface
 
     /**
      * Get the value of email
-     */ 
+     */
     public function getEmail()
     {
         return $this->email;
@@ -189,7 +169,7 @@ class User implements UserInterface
      * Set the value of email
      *
      * @return  self
-     */ 
+     */
     public function setEmail($email)
     {
         $this->email = $email;
@@ -199,7 +179,7 @@ class User implements UserInterface
 
     /**
      * @return Collection
-     */ 
+     */
     public function getPosts(): Collection
     {
         return $this->posts;
@@ -207,7 +187,7 @@ class User implements UserInterface
 
     /**
      * @return Collection
-     */ 
+     */
     public function getComments(): Collection
     {
         return $this->comments;
@@ -298,7 +278,6 @@ class User implements UserInterface
      */
     public function eraseCredentials()
     {
-
     }
 
     public function getUserIdentifier()
@@ -308,7 +287,7 @@ class User implements UserInterface
 
     /**
      * Get the value of retypedPassword
-     */ 
+     */
     public function getRetypedPassword()
     {
         return $this->retypedPassword;
@@ -318,7 +297,7 @@ class User implements UserInterface
      * Set the value of retypedPassword
      *
      * @return  self
-     */ 
+     */
     public function setRetypedPassword($retypedPassword)
     {
         $this->retypedPassword = $retypedPassword;

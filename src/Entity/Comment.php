@@ -12,32 +12,6 @@ use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * @ORM\Entity(repositoryClass=CommentRepository::class)
  */
-#[ApiResource(
-    attributes:[
-        'order' => ['published' => 'DESC'],
-        'pagination_enabled' => false,
-        'pagination_client_enabled' => true
-    ],
-    itemOperations: [
-        'GET' => [
-            'normalization_context' => ['groups' => ['get']]
-        ],
-        'PUT' => [
-            "security" => "object.getAuthor() === user"
-        ]
-    ],
-    collectionOperations: [
-        'GET' => [
-            'normalization_context' => ['groups' => ['get-comment-with-author']]
-        ],
-        'api_blog_posts_comments_get_subresource' => [
-            'normalization_context' => ['groups' => ['get-comment-with-author']]
-        ],
-        'POST' => [
-            'denormalization_context' => ['groups' => ['post']]
-        ]
-    ]
-)]
 class Comment implements AuthoredEntityInterface, PublishedDateTimeInterface
 {
     /**
@@ -105,7 +79,7 @@ class Comment implements AuthoredEntityInterface, PublishedDateTimeInterface
 
     /**
      * @return User
-     */ 
+     */
     public function getAuthor(): User
     {
         return $this->author;
@@ -115,7 +89,7 @@ class Comment implements AuthoredEntityInterface, PublishedDateTimeInterface
      * Set the value of author
      * @param UserInterface $author
      * @return  AuthoredEntityInterface
-     */ 
+     */
     public function setAuthor(UserInterface $author): AuthoredEntityInterface
     {
         $this->author = $author;

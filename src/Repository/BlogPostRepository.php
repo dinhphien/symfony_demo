@@ -16,7 +16,7 @@ use Knp\Component\Pager\PaginatorInterface;
  */
 class BlogPostRepository extends ServiceEntityRepository
 {
- 
+
     /**
      *
      * @var PaginatorInterface
@@ -59,10 +59,11 @@ class BlogPostRepository extends ServiceEntityRepository
      *
      * @return BlogPost[] Returns an array of BlogPost objects
      */
-    public function getBlogPost($page = 1, $limit = 10) {
+    public function getBlogPost($page = 1, $limit = 10)
+    {
         $query = $this->createQueryBuilder('b')
-        ->orderBy('b.published', 'DESC')
-        ->getQuery();
+            ->orderBy('b.published', 'DESC')
+            ->getQuery();
         return $this->paginator->paginate($query, $page, $limit)->getItems();
     }
 }

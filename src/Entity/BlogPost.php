@@ -22,33 +22,6 @@ use ApiPlatform\Core\Serializer\Filter\PropertyFilter;
 /**
  * @ORM\Entity(repositoryClass=BlogPostRepository::class)
  */
-#[ApiResource(
-    itemOperations: [
-        'GET' => [
-            'normalization_context' => ['groups' => ['get-blog-post-with-author']]
-        ],
-        'PUT' => [
-            "security" => "object.getAuthor() === user"
-        ]
-    ],
-    collectionOperations: [
-        'GET' => [
-            'normalization_context' => ['groups' => ['get-blog-post-with-author']]
-        ],
-        'POST' => [
-            'denormalization_context' => ['groups' => ['post']]
-        ]
-    ]
-)]
-#[ApiFilter(SearchFilter::class, properties: ['id' => 'exact', 'title' => 'partial', 'content' => 'partial', 'author.name' => 'partial'])]
-#[ApiFilter(DateFilter::class, properties: ['published'])]
-#[ApiFilter(RangeFilter::class, properties: ['id'])]
-#[ApiFilter(OrderFilter::class, properties: ['id', 'published', 'title'])]
-#[ApiFilter(PropertyFilter::class, arguments: [
-    'parameterName' => 'properties',
-    'overrideDefaultProperties' => 'false',
-    'whitelist' => ['id', 'author', 'slug', 'title', 'content']
-])]
 class BlogPost implements AuthoredEntityInterface, PublishedDateTimeInterface
 {
     /**
@@ -95,7 +68,7 @@ class BlogPost implements AuthoredEntityInterface, PublishedDateTimeInterface
      * @Groups({"get-blog-post-with-author"})
      * @ApiSubresource()
      * 
-     */ 
+     */
     private $author;
 
     /**
@@ -153,7 +126,7 @@ class BlogPost implements AuthoredEntityInterface, PublishedDateTimeInterface
 
     /**
      * Get the value of slug
-     */ 
+     */
     public function getSlug(): ?string
     {
         return $this->slug;
@@ -163,7 +136,7 @@ class BlogPost implements AuthoredEntityInterface, PublishedDateTimeInterface
      * Set the value of slug
      *
      * @return  self
-     */ 
+     */
     public function setSlug($slug)
     {
         $this->slug = $slug;
@@ -174,7 +147,7 @@ class BlogPost implements AuthoredEntityInterface, PublishedDateTimeInterface
     /**
      * Get the value of author
      * @return User
-     */ 
+     */
     public function getAuthor(): User
     {
         return $this->author;
@@ -184,7 +157,7 @@ class BlogPost implements AuthoredEntityInterface, PublishedDateTimeInterface
      * Set the value of author
      * @param UserInterface $author
      * @return  AuthoredEntityInterface
-     */ 
+     */
     public function setAuthor(UserInterface $author): AuthoredEntityInterface
     {
         $this->author = $author;
