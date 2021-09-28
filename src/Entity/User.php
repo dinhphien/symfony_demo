@@ -24,13 +24,13 @@ class User implements UserInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"get"})
+     * @Groups({"get", "get-detail-blog-post"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"get", "post", "get-comment-with-author", "get-blog-post-with-author"})
+     * @Groups({"get", "post", "get-comment-with-author", "get-blog-post-with-author", "get-detail-blog-post"})
      * @Assert\NotBlank()
      * @Assert\Length(min=6,max=255)
      */
@@ -74,7 +74,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"get", "post", "put", "get-comment-with-author", "get-blog-post-with-author"})
+     * @Groups({"get", "post", "put", "get-comment-with-author", "get-blog-post-with-author", "get-detail-blog-post"})
      * @Assert\NotBlank()
      * @Assert\Email()
      */

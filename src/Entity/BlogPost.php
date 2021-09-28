@@ -28,7 +28,7 @@ class BlogPost implements AuthoredEntityInterface, PublishedDateTimeInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"get-blog-post-with-author"})
+     * @Groups({"get-blog-post-with-author", "get-detail-blog-post"})
      */
     private $id;
 
@@ -36,13 +36,13 @@ class BlogPost implements AuthoredEntityInterface, PublishedDateTimeInterface
      * @ORM\Column(type="string", length=255)
      * @Assert\NotBlank()
      * @Assert\Length(min=10)
-     * @Groups({"post", "get-blog-post-with-author"})
+     * @Groups({"post", "get-blog-post-with-author", "get-detail-blog-post"})
      */
     private $title;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"get-blog-post-with-author"})
+     * @Groups({"get-blog-post-with-author", "get-detail-blog-post"})
      * 
      */
     private $published;
@@ -51,30 +51,28 @@ class BlogPost implements AuthoredEntityInterface, PublishedDateTimeInterface
      * @ORM\Column(type="text")
      * @Assert\NotBlank()
      * @Assert\Length(min=20)
-     * @Groups({"post", "get-blog-post-with-author"})
+     * @Groups({"post", "get-blog-post-with-author", "get-detail-blog-post"})
      */
     private $content;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Assert\NotBlank()
-     * @Groups({"post", "get-blog-post-with-author"})
+     * @Groups({"post", "get-blog-post-with-author", "get-detail-blog-post"})
      */
     private $slug;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="posts")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"get-blog-post-with-author"})
-     * @ApiSubresource()
+     * @Groups({"get-blog-post-with-author", "get-detail-blog-post"})
      * 
      */
     private $author;
 
     /**
      * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="blogPost")
-     * @Groups({"get-blog-post-with-author"})
-     * @ApiSubresource()
+     * @Groups({"get-detail-blog-post"})
      */
     private $comments;
 

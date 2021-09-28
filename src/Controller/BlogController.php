@@ -53,9 +53,10 @@ class BlogController extends AbstractController
     #[Route('/post/{id}', name: 'blog_by_id', methods: ['GET'], requirements: ['id' => '\d+'])]
     public function post(BlogPost $post): Response
     {
+        $data = $this->get('serializer')->normalize($post, 'json', ['groups' => 'get-detail-blog-post']);
         return $this->json([
             'success' => true,
-            'data' => $post
+            'data' => $data
         ]);
     }
 

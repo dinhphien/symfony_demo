@@ -18,26 +18,26 @@ class Comment implements AuthoredEntityInterface, PublishedDateTimeInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"get-comment-with-author"})
+     * @Groups({"get-comment-with-author", "get-detail-blog-post"})
      */
     private $id;
 
     /**
      * @ORM\Column(type="text")
-     * @Groups({"get-comment-with-author", "post"})
+     * @Groups({"get-comment-with-author", "post", "get-detail-blog-post"})
      */
     private $content;
 
     /**
      * @ORM\Column(type="datetime")
-     * @Groups({"get-comment-with-author"})
+     * @Groups({"get-comment-with-author", "get-detail-blog-post"})
      */
     private $published;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="comments")
      * @ORM\JoinColumn(nullable=false)
-     * @Groups({"get-comment-with-author"})
+     * @Groups({"get-comment-with-author", "get-detail-blog-post"})
      */
     private $author;
 
