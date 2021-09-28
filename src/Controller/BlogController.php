@@ -30,7 +30,7 @@ class BlogController extends AbstractController
     public function list(Request $request): Response
     {
         $this->logger->debug("Fetching all blogs!");
-        $listBlogRequest = new ListBlogPostRequest($request);
+        $listBlogRequest = new ListBlogPostRequest($request, $this->getUser());
         $this->validator->validate($listBlogRequest);
 
         $page = $listBlogRequest->getPage();
