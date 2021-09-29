@@ -9,7 +9,7 @@ class BaseValidatingRequest implements ValidateRequestInterface
 {
   private $request;
   private $user;
-  public function __construct(Request $request, UserInterface $user)
+  public function __construct(Request $request, ?UserInterface $user)
   {
     $this->request = $request;
     $this->user = $user;

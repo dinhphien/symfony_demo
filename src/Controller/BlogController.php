@@ -42,15 +42,14 @@ class BlogController extends AbstractController
         $items = $repository->getBlogPost($page, $limit);
         /**@var Serializer $serializer*/
         $serializer = $this->get('serializer');
-        $result = [
+        $data = $serializer->normalize($items, 'json', ['groups' => 'get-blog-post-with-author']);
+        return $this->json([
             'success' => true,
-            'data' => $items
-        ];
-        $data = $serializer->serialize($result, 'json', ['groups' => 'get-blog-post-with-author']);
-        return new JsonResponse($data, 200, [], true);
+            'data' => $data
+        ]);
     }
 
-    #[Route('/post/{id}', name: 'blog_by_id', methods: ['GET'], requirements: ['id' => '\d+'])]
+    #[Route('/{id}', name: 'blog_by_id', methods: ['GET'], requirements: ['id' => '\d+'])]
     public function post(BlogPost $post): Response
     {
         $data = $this->get('serializer')->normalize($post, 'json', ['groups' => 'get-detail-blog-post']);

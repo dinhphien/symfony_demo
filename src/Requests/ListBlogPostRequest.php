@@ -13,7 +13,7 @@ class ListBlogPostRequest extends BaseValidatingRequest
     private $page;
     #[Range(["min" => 1, "max" => 50])]
     private $limit;
-    public function __construct(Request $request, UserInterface $user)
+    public function __construct(Request $request, ?UserInterface $user)
     {
         parent::__construct($request, $user);
         $this->page = $request->query->get('page', 1);
