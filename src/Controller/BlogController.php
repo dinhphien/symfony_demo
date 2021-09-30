@@ -3,12 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\BlogPost;
-use App\Requests\BaseValidatingRequest;
 use App\Requests\ListBlogPostRequest;
 use App\Services\RequestValidatorService;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;

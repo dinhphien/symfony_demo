@@ -17,27 +17,26 @@ class AuthenticationController extends AbstractController
         ]);
     }
 
-    #[Route('/register', name:'register', methods:['POST'])]
+    #[Route('/register', name: 'register', methods: ['POST'])]
     public function register(): Response
     {
-        return $this->json([
-
-        ]);
+        return $this->json([]);
     }
 
-    #[Route('/me', name:'me', methods:['GET'])]
+    #[Route('/me', name: 'me', methods: ['GET'])]
     public function me(): Response
     {
+        $user = $this->getUser();
+        $data = $this->get('serializer')->normalize($user, 'json', ['groups' => 'get']);
         return $this->json([
-
+            'success' => true,
+            'data' => $data
         ]);
     }
 
-    #[Route('/logout', name:'logout', methods:['GET'])]
+    #[Route('/logout', name: 'logout', methods: ['GET'])]
     public function logout(): Response
     {
-        return $this->json([
-
-        ]);
+        return $this->json([]);
     }
 }

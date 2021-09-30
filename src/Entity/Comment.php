@@ -2,12 +2,10 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiResource;
-use App\Repository\CommentRepository;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\ManyToOne;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=CommentRepository::class)
@@ -24,6 +22,7 @@ class Comment implements AuthoredEntityInterface, PublishedDateTimeInterface
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\NotBlank()
      * @Groups({"get-comment-with-author", "post", "get-detail-blog-post"})
      */
     private $content;
