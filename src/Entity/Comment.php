@@ -6,6 +6,10 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
+use App\Repository\CommentRepository;
+use Doctrine\ORM\Mapping\Column;
+
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 /**
  * @ORM\Entity(repositoryClass=CommentRepository::class)
@@ -20,9 +24,10 @@ class Comment implements AuthoredEntityInterface, PublishedDateTimeInterface
      */
     private $id;
 
+
     /**
      * @ORM\Column(type="text")
-     * @Assert\NotBlank()
+     * @Assert\NotBlank(message="Content cannot be blank!")
      * @Groups({"get-comment-with-author", "post", "get-detail-blog-post"})
      */
     private $content;

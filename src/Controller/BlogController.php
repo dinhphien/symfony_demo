@@ -35,8 +35,6 @@ class BlogController extends AbstractController
         $limit = $listBlogRequest->getLimit();
 
         $repository = $this->getDoctrine()->getRepository(BlogPost::class);
-
-
         $items = $repository->getBlogPost($page, $limit);
         /**@var Serializer $serializer*/
         $serializer = $this->get('serializer');

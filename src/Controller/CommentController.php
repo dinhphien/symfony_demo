@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\BlogPost;
 use App\Entity\Comment;
+use App\Helper\ErrorParser;
 use DateTime;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -46,8 +47,8 @@ class CommentController extends AbstractController
         if ($violations->count() > 0) {
             return $this->json([
                 'success' => false,
-                'message' => 'Invalid comment'
-            ]);
+                'message' => ErrorParser::parseConstraintViolations($violations)
+            ], 400);
         }
         $comment->setPublished(new DateTime());
         $comment->setAuthor($this->getUser());
