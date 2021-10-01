@@ -61,7 +61,6 @@ class User implements UserInterface
     /**
      * @ORM\Column(type="boolean")
      * @Groups({"get", "post", "put"})
-     * @Assert\NotBlank()
      */
     private $active;
 

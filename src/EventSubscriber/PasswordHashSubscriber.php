@@ -18,7 +18,7 @@ class PasswordHashSubscriber implements EventSubscriberInterface
     {
         $this->passwordEncoder = $passwordEncoder;
     }
-    
+
     public static function getSubscribedEvents()
     {
         return [
@@ -43,6 +43,5 @@ class PasswordHashSubscriber implements EventSubscriberInterface
         $user->setPassword(
             $this->passwordEncoder->hashPassword($user, $user->getPassword())
         );
-        
     }
 }

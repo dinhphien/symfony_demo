@@ -2,9 +2,14 @@
 
 namespace App\Controller;
 
+use App\Entity\User;
+use App\Helper\ErrorParser;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class AuthenticationController extends AbstractController
 {
@@ -18,9 +23,30 @@ class AuthenticationController extends AbstractController
     }
 
     #[Route('/register', name: 'register', methods: ['POST'])]
-    public function register(): Response
+    public function register(Request $request, ValidatorInterface $validator, UserPasswordHasherInterface $passwordEncoder): Response
     {
-        return $this->json([]);
+        $serializer = $this->get('serializer');
+        $user = $serializer->deserialize($request->getContent(), User::class, 'json');
+        $violations  = $validator->validate($user);
+        if ($violations->count() > 0) {
+            return $this->json([
+                'success' => false,
+                'message' => ErrorParser::parseConstraintViolations($violations)
+            ], 400);
+        }
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $user->setActive(true);
+        $user->setPassword(
+            $passwordEncoder->hashPassword($user, $user->getPassword())
+        );
+        $entityManager->persist($user);
+        $entityManager->flush();
+        $data = $serializer->normalize($user, 'json', ['groups' => 'get']);
+        return $this->json([
+            'success' => true,
+            'data' => $data
+        ]);
     }
 
     #[Route('/me', name: 'me', methods: ['GET'])]
