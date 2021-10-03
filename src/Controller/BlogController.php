@@ -3,14 +3,17 @@
 namespace App\Controller;
 
 use App\Entity\BlogPost;
+use App\Helper\ErrorParser;
 use App\Requests\ListBlogPostRequest;
 use App\Services\RequestValidatorService;
+use DateTime;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 #[Route('/blog')]
 class BlogController extends AbstractController
@@ -56,16 +59,31 @@ class BlogController extends AbstractController
     }
 
     #[Route('/create', name: 'blog_create', methods: ['POST'])]
-    public function create(Request $request): Response
+    public function create(Request $request, ValidatorInterface $validator): Response
     {
         /**@var Serializer $serializer*/
         $serializer = $this->get('serializer');
         $blogPost = $serializer->deserialize($request->getContent(), BlogPost::class, 'json');
+        $blogPost->setPublished(new DateTime());
+        $blogPost->setAuthor($this->getUser());
+
+        $violations = $validator->validate($blogPost);
+        if ($violations->count() > 0) {
+            return $this->json([
+                'success' => false,
+                'message' => ErrorParser::parseConstraintViolations($violations)
+            ], 400);
+        }
 
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->persist($blogPost);
         $entityManager->flush();
-        return $this->json($blogPost);
+
+        $data = $this->get('serializer')->normalize($blogPost, 'json', ['groups' => 'get-detail-blog-post']);
+        return $this->json([
+            'success' => true,
+            'data' => $data
+        ]);
     }
 
     #[Route('/delete/{id}', name: 'blog_delete', methods: ['DELETE'], requirements: ['id' => '\d+'])]
