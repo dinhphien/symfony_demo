@@ -66,7 +66,7 @@ class User implements UserInterface
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Groups({"get", "post", "put", "get-blog-post-with-author", "get-comment-with-author"})
+     * @Groups({"get", "post", "put", "get-blog-post-with-author", "get-comment-with-author", "get-detail-blog-post"})
      * @Assert\NotBlank()
      */
     private $name;

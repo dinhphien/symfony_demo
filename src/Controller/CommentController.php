@@ -26,7 +26,7 @@ class CommentController extends AbstractController
     public function index(int $id): Response
     {
         $repository = $this->getDoctrine()->getRepository(Comment::class);
-        $comments = $repository->findBy(['blogPost' => $id]);
+        $comments = $repository->findBy(['blogPost' => $id], ['published' => 'DESC']);
         /**@var Serializer */
         $serializer = $this->get('serializer');
         $data = $serializer->normalize($comments, 'json', ['groups' => 'get-comment-with-author']);
