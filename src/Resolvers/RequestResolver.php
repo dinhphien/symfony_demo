@@ -7,6 +7,7 @@ use App\Helper\ErrorParser;
 use App\Requests\BaseValidatingRequest;
 use App\Requests\ValidateRequestInterface;
 use ReflectionClass;
+use ReflectionException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ArgumentValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
@@ -27,7 +28,12 @@ class RequestResolver implements ArgumentValueResolverInterface
 
     public function supports(Request $request, ArgumentMetadata $argument)
     {
-        if ((new ReflectionClass($argument->getType()))->isSubclassOf(BaseValidatingRequest::class)) {
+        try {
+            $reflectedClass = new ReflectionClass($argument->getType());
+        } catch (ReflectionException $ex) {
+            return false;
+        }
+        if ($reflectedClass->isSubclassOf(BaseValidatingRequest::class)) {
             return true;
         }
         return false;

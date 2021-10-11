@@ -25,7 +25,7 @@ class BlogController extends AbstractController
         $this->logger = $logger;
     }
 
-    #[Route('', name: 'blog_list', methods: ['GET'])]
+    #[Route('/', name: 'blog_list', methods: ['GET'])]
     public function index(ListBlogPostRequest $request): Response
     {
         $this->logger->debug("Fetching all blogs!");
