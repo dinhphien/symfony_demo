@@ -20,22 +20,18 @@ class BlogController extends AbstractController
 {
     /**@var LoggerInterface */
     private $logger;
-    private $validator;
-    public function __construct(LoggerInterface $logger, RequestValidatorService $validator)
+    public function __construct(LoggerInterface $logger)
     {
         $this->logger = $logger;
-        $this->validator = $validator;
     }
 
-    #[Route('/', name: 'blog_list', methods: ['GET'])]
-    public function list(Request $request): Response
+    #[Route('', name: 'blog_list', methods: ['GET'])]
+    public function index(ListBlogPostRequest $request): Response
     {
         $this->logger->debug("Fetching all blogs!");
-        $listBlogRequest = new ListBlogPostRequest($request, $this->getUser());
-        $this->validator->validate($listBlogRequest);
 
-        $page = $listBlogRequest->getPage();
-        $limit = $listBlogRequest->getLimit();
+        $page = $request->getPage();
+        $limit = $request->getLimit();
 
         $repository = $this->getDoctrine()->getRepository(BlogPost::class);
         $items = $repository->getBlogPost($page, $limit);

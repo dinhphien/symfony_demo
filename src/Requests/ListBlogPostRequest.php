@@ -9,7 +9,7 @@ use Symfony\Component\Validator\Constraints\Range;
 
 class ListBlogPostRequest extends BaseValidatingRequest
 {
-    #[Positive()]
+    #[Range(["min" => 1])]
     private $page;
     #[Range(["min" => 1, "max" => 50])]
     private $limit;

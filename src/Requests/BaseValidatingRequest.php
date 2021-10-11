@@ -7,8 +7,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class BaseValidatingRequest implements ValidateRequestInterface
 {
-  private $request;
-  private $user;
+  protected $request;
+  protected $user;
   public function __construct(Request $request, ?UserInterface $user)
   {
     $this->request = $request;
