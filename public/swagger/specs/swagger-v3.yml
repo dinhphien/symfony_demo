@@ -1,0 +1,110 @@
+openapi: '3.0.2'
+info:
+  title: Swagger API Demo Application
+  description: API Demo Application specification
+  version: '1.0'
+servers:
+  - url: https://api.server.test/v1
+    description: Development Server
+tags:
+  - name: User
+    description: operations related to user entity
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        email:
+          type: string
+
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+paths:
+  /users:
+    get:
+      summary: Get all users
+      description: ""
+      operationId:  listUser
+      tags:
+        - User
+      parameters:
+        - name: page
+          description: The page number to get
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+          required: false
+        - name: limit
+          description: The maximum item per page
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            default: 20
+          required: false
+      responses:
+        '200':
+          description: A list of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref:  "#/components/schemas/User"
+        '400':
+          description: Bad request . The sepcified page or limit parameter is invalid.
+        default:
+          description: Unexpected error
+
+    post:
+      description: Create an user
+      operationId: createUser
+      tags:
+        - User
+      security:
+        - BearerAuth: []
+      requestBody:
+        description: Request body cannot be empty!
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema: 
+              type: object
+              properties:
+                name:
+                  type: string
+                email:
+                  type: string
+              required:
+                - name
+                - email   
+      responses:
+        '200':
+          description: User created
+          content:
+            application/json:
+              schema:
+                $ref:  "#/components/schemas/User"
+        '400':
+          description: Bad request.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    default: false
+                  messages:
+                    type: string
+                    description: error messages
