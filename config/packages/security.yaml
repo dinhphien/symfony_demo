@@ -39,5 +39,6 @@ security:
     access_control:
         - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/register, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/swagger, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/api/blog, roles: IS_AUTHENTICATED_ANONYMOUSLY, methods: ['GET'] }
         - { path: ^/api,       roles: IS_AUTHENTICATED_FULLY }

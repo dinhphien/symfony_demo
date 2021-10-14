@@ -1,0 +1,8 @@
+openapi: 3.0.0
+info:
+  description: "API Demo Application specification"
+  version: "1.0.0"
+  title: "Swagger API Demo Application"
+servers:
+  - url: http://api.example.com/v1
+    description: Production server
